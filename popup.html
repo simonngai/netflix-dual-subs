@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    width: 260px;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    color: #e5e5e5;
+    background: #141414;
+    margin: 0;
+  }
+  h2 {
+    margin: 0 0 12px 0;
+    font-size: 15px;
+    color: #fff;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  label {
+    color: #aaa;
+    font-size: 12px;
+  }
+  select {
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  .toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+  }
+  .toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #555;
+    border-radius: 22px;
+    transition: 0.2s;
+  }
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  .toggle input:checked + .slider {
+    background: #e50914;
+  }
+  .toggle input:checked + .slider:before {
+    transform: translateX(18px);
+  }
+  input[type="range"] {
+    width: 120px;
+    accent-color: #e50914;
+  }
+  .val {
+    color: #888;
+    font-size: 11px;
+    min-width: 30px;
+    text-align: right;
+  }
+  .hint {
+    color: #666;
+    font-size: 11px;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+  <h2>Dual Subs</h2>
+
+  <div class="row">
+    <label>Enabled</label>
+    <label class="toggle">
+      <input type="checkbox" id="enabled" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="row">
+    <label>Primary (Netflix)</label>
+    <select id="primaryLang">
+      <option value="ja">日本語</option>
+      <option value="zh-Hans">中文 (简)</option>
+      <option value="zh-Hant">中文 (繁)</option>
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label>Secondary (overlay)</label>
+    <select id="secondaryLang">
+      <option value="zh-Hant">中文 (繁)</option>
+      <option value="en">English</option>
+      <option value="zh-Hans">中文 (简)</option>
+      <option value="ja">日本語</option>
+      <option value="ko">한국어</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label>Position</label>
+    <input type="range" id="position" min="1" max="20" value="5">
+    <span class="val" id="posVal">5%</span>
+  </div>
+
+  <div class="row">
+    <label>Font size</label>
+    <input type="range" id="fontSize" min="8" max="32" value="16" step="1">
+    <span class="val" id="sizeVal">16px</span>
+  </div>
+
+  <div class="row">
+    <label>Opacity</label>
+    <input type="range" id="opacity" min="20" max="100" value="90" step="5">
+    <span class="val" id="opVal">90%</span>
+  </div>
+
+  <div class="hint">D = toggle · S = capture to clipboard</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

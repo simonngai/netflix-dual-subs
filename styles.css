@@ -1,0 +1,48 @@
+#dual-subs-overlay {
+  position: fixed;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  text-align: center;
+  pointer-events: none;
+  max-width: 80%;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-family: Netflix Sans, Helvetica Neue, Segoe UI, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #ccc;
+  background: rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.15s ease;
+  opacity: 0;
+  white-space: pre-line;
+}
+
+#dual-subs-overlay.visible {
+  opacity: 1;
+}
+
+#dual-subs-status {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #0f0;
+  background: rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: normal;
+  max-width: 90%;
+}
+
+#dual-subs-status.visible {
+  opacity: 1;
+}
