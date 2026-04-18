@@ -3,6 +3,8 @@
 (function () {
   'use strict';
 
+  const DEBUG = false; // flip true for verbose logging
+
   let enabled = true;
   let secondaryLang = 'zh-Hant';
   let primaryLang = 'ja';
@@ -65,10 +67,11 @@
   // --- Track Interception (via postMessage from MAIN world) ---
 
   window.addEventListener('message', (e) => {
+    if (e.source !== window) return; // ignore messages from other windows/frames
     if (e.data && e.data.type === 'DUAL_SUBS_TRACKS') {
       tracks = e.data.tracks;
       const langs = tracks.map(t => `${t.language}${t.isImage ? '(img)' : ''}`).join(', ');
-      console.log('[DualSubs] Tracks:', langs);
+      DEBUG && console.log('[DualSubs] Tracks:', langs);
       showStatus(`${tracks.length} tracks: ${langs}`);
       loadPrimaryTrack();
       loadSecondaryTrack();
@@ -105,7 +108,7 @@
       .then(r => r.ok ? r.text() : Promise.reject(`HTTP ${r.status}`))
       .then(text => {
         primaryCues = text.trim().startsWith('<') ? parseTTML(text) : parseWebVTT(text);
-        console.log(`[DualSubs] Primary (${primaryLang}): ${primaryCues.length} cues loaded for capture`);
+        DEBUG && console.log(`[DualSubs] Primary (${primaryLang}): ${primaryCues.length} cues loaded for capture`);
       })
       .catch(err => console.warn('[DualSubs] Primary track load failed:', err));
   }
@@ -130,7 +133,7 @@
     }
 
     if (track.isImage) {
-      console.log(`[DualSubs] "${track.language}" is image-based (nflx-cmisc), trying imsc1.1 fallback...`);
+      DEBUG && console.log(`[DualSubs] "${track.language}" is image-based (nflx-cmisc), trying imsc1.1 fallback...`);
       // Image tracks also have imsc1.1 which is text-based XML
       // Re-check if we have a text version of this language
       const textTrack = tracks.find(t =>
@@ -144,7 +147,7 @@
       }
     }
 
-    console.log(`[DualSubs] Loading: ${track.displayName} (${track.format})`);
+    DEBUG && console.log(`[DualSubs] Loading: ${track.displayName} (${track.format})`);
     showStatus(`Loading ${track.displayName}...`);
 
     fetch(track.url)
@@ -163,7 +166,7 @@
             secondaryCues = parseWebVTT(text);
           }
         }
-        console.log(`[DualSubs] Parsed ${secondaryCues.length} cues`);
+        DEBUG && console.log(`[DualSubs] Parsed ${secondaryCues.length} cues`);
         showStatus(`${track.displayName}: ${secondaryCues.length} cues ✓`, 3000);
       })
       .catch(err => {
@@ -333,7 +336,7 @@
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    console.log('[DualSubs] Content script initialized');
+    DEBUG && console.log('[DualSubs] Content script initialized');
   }
 
   // --- Capture ---
@@ -457,6 +460,7 @@
   // --- Keyboard shortcuts (relayed from MAIN world via postMessage) ---
 
   window.addEventListener('message', (e) => {
+    if (e.source !== window) return; // ignore messages from other windows/frames
     if (e.data && e.data.type === 'DUAL_SUBS_KEY') {
       if (e.data.key === 'd') {
         enabled = !enabled;

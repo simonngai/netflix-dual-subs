@@ -3,6 +3,8 @@
 (function () {
   'use strict';
 
+  const DEBUG = false; // flip true for verbose logging
+
   const originalParse = JSON.parse;
 
   JSON.parse = function () {
@@ -65,7 +67,7 @@
           })
           .filter(t => t.url);
 
-        console.log('[DualSubs:MAIN] Found', trackList.length, 'tracks with URLs:',
+        DEBUG && console.log('[DualSubs:MAIN] Found', trackList.length, 'tracks with URLs:',
           trackList.map(t => `${t.language}(${t.format}${t.isImage ? ',img' : ''})`).join(', '));
 
         window.postMessage({
@@ -120,5 +122,5 @@
     return origAddEventListener.call(this, type, listener, options);
   };
 
-  console.log('[DualSubs:MAIN] Intercept installed');
+  DEBUG && console.log('[DualSubs:MAIN] Intercept installed');
 })();
