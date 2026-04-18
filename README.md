@@ -2,7 +2,9 @@
 
 Chrome extension for **dual subtitles on Netflix** — show two languages at once (e.g. Japanese + Traditional Chinese). Built for language learners.
 
-Defaults to Japanese (primary) + Traditional Chinese (secondary). Configurable via the extension popup — supports JP / ZH-Hant / ZH-Hans / EN / KO.
+Defaults to Japanese (primary) + Traditional Chinese (secondary). Configurable via the extension popup — supports 30+ languages (JP, KO, ZH-Hant, ZH-Hans, EN, ES, FR, DE, IT, PT, RU, AR, HI, ID, TH, VI, TR, and more).
+
+Any Netflix-supported language works — the code matches whatever language code Netflix serves, so adding more to the dropdown is a trivial edit in `popup.html`.
 
 ## Features
 
