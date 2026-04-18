@@ -454,34 +454,24 @@
     return `${m}:${s.toString().padStart(2, '0')}`;
   }
 
-  // --- Keyboard shortcuts ---
+  // --- Keyboard shortcuts (relayed from MAIN world via postMessage) ---
 
-  document.addEventListener('keydown', (e) => {
-    // Don't capture when typing in input fields
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
-
-    // D key to toggle dual subs
-    if (e.key === 'd' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-      e.stopPropagation();
-      e.preventDefault();
-      enabled = !enabled;
-      chrome.storage.sync.set({ enabled });
-      if (overlayEl) overlayEl.style.display = enabled ? 'block' : 'none';
-      showStatus(enabled ? 'Enabled' : 'Disabled', 2000);
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'DUAL_SUBS_KEY') {
+      if (e.data.key === 'd') {
+        enabled = !enabled;
+        chrome.storage.sync.set({ enabled });
+        if (overlayEl) overlayEl.style.display = enabled ? 'block' : 'none';
+        showStatus(enabled ? 'Enabled' : 'Disabled', 2000);
+      }
+      if (e.data.key === 's') {
+        captureCurrentLine();
+      }
+      if (e.data.key === 'e') {
+        exportAllCues();
+      }
     }
-    // S key to capture current line to clipboard
-    if (e.key === 's' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-      e.stopPropagation();
-      e.preventDefault();
-      captureCurrentLine();
-    }
-    // E key to export all cues to clipboard
-    if (e.key === 'e' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-      e.stopPropagation();
-      e.preventDefault();
-      exportAllCues();
-    }
-  }, true);
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

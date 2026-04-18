@@ -90,5 +90,35 @@
     return originalStringify.apply(this, arguments);
   };
 
+  // Keyboard shortcuts — hijack addEventListener to wrap Netflix's keydown handlers
+  const ourKeys = new Set(['d', 's', 'e']);
+
+  function handleOurKey(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return false;
+    if (ourKeys.has(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      window.postMessage({ type: 'DUAL_SUBS_KEY', key: e.key }, '*');
+      return true;
+    }
+    return false;
+  }
+
+  // Register on window capture phase (earliest possible)
+  window.addEventListener('keydown', handleOurKey, true);
+
+  // Wrap addEventListener so ANY element's keydown listener checks our keys first
+  const origAddEventListener = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function (type, listener, options) {
+    if (type === 'keydown' && typeof listener === 'function') {
+      const wrapped = function (e) {
+        if (handleOurKey(e)) return; // swallow if it's our key
+        return listener.call(this, e);
+      };
+      return origAddEventListener.call(this, type, wrapped, options);
+    }
+    return origAddEventListener.call(this, type, listener, options);
+  };
+
   console.log('[DualSubs:MAIN] Intercept installed');
 })();
