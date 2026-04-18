@@ -6,6 +6,16 @@ Defaults to Japanese (primary) + Traditional Chinese (secondary). Configurable v
 
 Any Netflix-supported language works — the code matches whatever language code Netflix serves, so adding more to the dropdown is a trivial edit in `popup.html`.
 
+## Demo
+
+Dual subtitles in action (Japanese primary + Traditional Chinese secondary):
+
+![Dual subtitles on Netflix](screenshots/dual-subs-demo.png)
+
+Configure language pair, position, font size, and opacity from the popup:
+
+![Extension popup](screenshots/popup.png)
+
 ## Features
 
 - Dual subtitle overlay: primary (Netflix's native track) + secondary (fetched from Netflix's subtitle manifest)
